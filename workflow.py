@@ -30,7 +30,7 @@ def call_grok(prompt_text):
         "Authorization": f"Bearer {GROK_API_KEY}"
     }
     data = {
-        "model": "grok-beta",
+        "model": "grok-2",  # Fixed outdated model name here
         "messages": [
             {"role": "system", "content": "You are an elite AI system. Perform real-time web research if required."},
             {"role": "user", "content": prompt_text}
@@ -122,7 +122,7 @@ Final but most necessary instructions that should be followed even if opposite i
 There should be no illogical, glitchy, uncomfortable,non-realistic ,tobotic motion and animation, no text at all (in girl section the nipples or shape of boob nipples should not be visible"""
 
 # =====================================================================
-# 4. ERROR-FREE NATIVE STREAMLIT CHAT LAYOUT
+# 4. STREAMLIT CHAT ENGINE FLOW
 # =====================================================================
 for chat in st.session_state.chat_history:
     with st.chat_message(chat["role"]):
