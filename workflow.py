@@ -2,20 +2,12 @@ import streamlit as st
 import requests
 
 # =====================================================================
-# 1. PAGE CONFIGURATION & CLEAN DARK THEME
+# 1. PAGE CONFIGURATION & CLEAN ENGINE THEME
 # =====================================================================
 st.set_page_config(page_title="Dark Matrix Automator", page_icon="🎴", layout="centered")
 
-# Safe theme injection without breaking string syntax
-st.html("""
-<style>
-    .stApp { background-color: #0B0C10; color: #C5C6C7; }
-    h1, h2, h3 { color: #66FCF1 !important; font-family: 'Courier New', Courier, monospace; }
-    div[data-baseweb='input'] { background-color: #1F2833 !important; color: white !important; }
-    .chat-bubble-user { background-color: #1F2833; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #45A29E; }
-    .chat-bubble-bot { background-color: #121824; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #66FCF1; }
-</style>
-""")
+st.title("🎴 Dark Matrix AI Core")
+st.caption("Automated Content Framework & Architecture")
 
 # =====================================================================
 # 2. X-AI (GROK) API INTEGRATION
@@ -130,20 +122,18 @@ Final but most necessary instructions that should be followed even if opposite i
 There should be no illogical, glitchy, uncomfortable,non-realistic ,tobotic motion and animation, no text at all (in girl section the nipples or shape of boob nipples should not be visible"""
 
 # =====================================================================
-# 4. STREAMLIT APP ENGINE FLOW
+# 4. ERROR-FREE NATIVE STREAMLIT CHAT LAYOUT
 # =====================================================================
-st.title("🎴 Dark Matrix AI Core")
-st.caption("Automated Content Framework & Architecture")
-
 for chat in st.session_state.chat_history:
-    role_class = "chat-bubble-user" if chat["role"] == "user" else "chat-bubble-bot"
-    st.markdown(f'<div class="{role_class}"><b>{chat["role"].upper()}:</b><br>{chat["text"]}</div>', unsafe_value_html=True)
+    with st.chat_message(chat["role"]):
+        st.write(chat["text"])
 
 user_input = st.chat_input("Command...")
 
 if user_input:
     st.session_state.chat_history.append({"role": "user", "text": user_input})
-    st.markdown(f'<div class="chat-bubble-user"><b>USER:</b><br>{user_input}</div>', unsafe_value_html=True)
+    with st.chat_message("user"):
+        st.write(user_input)
     
     input_clean = user_input.strip().lower()
     
@@ -151,7 +141,7 @@ if user_input:
         with st.spinner("Invoking Grok Matrix Engine..."):
             response_text = call_grok(PROMPT_1_CATEGORY)
             st.session_state.step = "WAIT_FOR_CATEGORY"
-            st.session_state.chat_history.append({"role": "ai", "text": response_text})
+            st.session_state.chat_history.append({"role": "assistant", "text": response_text})
             st.rerun()
 
     elif st.session_state.step == "WAIT_FOR_CATEGORY":
@@ -160,7 +150,7 @@ if user_input:
             response_text = call_grok(context_prompt)
             st.session_state.generated_topics = response_text
             st.session_state.step = "WAIT_FOR_TOPIC"
-            st.session_state.chat_history.append({"role": "ai", "text": response_text})
+            st.session_state.chat_history.append({"role": "assistant", "text": response_text})
             st.rerun()
 
     elif st.session_state.step == "WAIT_FOR_TOPIC":
@@ -170,13 +160,13 @@ if user_input:
             response_text = call_grok(script_prompt)
             st.session_state.final_script = response_text
             st.session_state.step = "SCRIPT_GENERATED"
-            st.session_state.chat_history.append({"role": "ai", "text": response_text})
+            st.session_state.chat_history.append({"role": "assistant", "text": response_text})
             st.rerun()
 
     elif input_clean == "visual" and st.session_state.step == "SCRIPT_GENERATED":
         response_text = "give it to me"
         st.session_state.step = "VISUAL_PHASE_2"
-        st.session_state.chat_history.append({"role": "ai", "text": response_text})
+        st.session_state.chat_history.append({"role": "assistant", "text": response_text})
         st.rerun()
 
     elif st.session_state.step == "VISUAL_PHASE_2":
@@ -184,8 +174,8 @@ if user_input:
             final_execution_prompt = f"{PROMPT_3_VISUAL}\n\n[PHASE 2 ACTIVE] Here is the target script to process now:\n{st.session_state.final_script}"
             response_text = call_grok(final_execution_prompt)
             st.session_state.step = "START"
-            st.session_state.chat_history.append({"role": "ai", "text": response_text})
+            st.session_state.chat_history.append({"role": "assistant", "text": response_text})
             st.rerun()
             
     else:
-        st.warning("⚠️ Sequence break. Type 'start' or follow the ongoing flow.")
+        st.sidebar.warning("⚠️ Sequence break. Type 'start' or follow the ongoing flow.")
