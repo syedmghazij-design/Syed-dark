@@ -1,14 +1,21 @@
 import streamlit as st
 import requests
-import json
 
 # =====================================================================
-# 1. PAGE CONFIGURATION & DARK THEME
+# 1. PAGE CONFIGURATION & CLEAN DARK THEME
 # =====================================================================
 st.set_page_config(page_title="Dark Matrix Automator", page_icon="🎴", layout="centered")
 
-# Injected clean styles
-st.markdown("<style>.stApp {background-color: #0B0C10; color: #C5C6C7;} h1, h2, h3 {color: #66FCF1 !important; font-family: 'Courier New', Courier, monospace;} div[data-baseweb='input'] {background-color: #1F2833 !important; color: white !important;} .chat-bubble-user {background-color: #1F2833; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #45A29E;} .chat-bubble-bot {background-color: #121824; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #66FCF1;}</style>", unsafe_value_html=True)
+# Safe theme injection without breaking string syntax
+st.html("""
+<style>
+    .stApp { background-color: #0B0C10; color: #C5C6C7; }
+    h1, h2, h3 { color: #66FCF1 !important; font-family: 'Courier New', Courier, monospace; }
+    div[data-baseweb='input'] { background-color: #1F2833 !important; color: white !important; }
+    .chat-bubble-user { background-color: #1F2833; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #45A29E; }
+    .chat-bubble-bot { background-color: #121824; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #66FCF1; }
+</style>
+""")
 
 # =====================================================================
 # 2. X-AI (GROK) API INTEGRATION
@@ -48,7 +55,7 @@ def call_grok(prompt_text):
         return f"Connection Error: {str(e)}"
 
 # =====================================================================
-# 3. FIXED AUTOMATION PROMPTS
+# 3. AUTOMATION PROMPTS
 # =====================================================================
 PROMPT_1_CATEGORY = """Role & Context:
 You are an elite AI Content Strategist specializing in the "Dark Psychology, Hidden Matrix Codes, & Behavioral Domination" niche. Your job is to help users discover the most viral, high-retention topic for their short-form video.
