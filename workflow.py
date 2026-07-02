@@ -1,5 +1,4 @@
 import streamlit as st
-import os
 import requests
 import json
 
@@ -8,11 +7,11 @@ import json
 # =====================================================================
 st.set_page_config(page_title="Dark Matrix Automator", page_icon="🎴", layout="centered")
 
-# Error-free style injection
+# Injected clean styles
 st.markdown("<style>.stApp {background-color: #0B0C10; color: #C5C6C7;} h1, h2, h3 {color: #66FCF1 !important; font-family: 'Courier New', Courier, monospace;} div[data-baseweb='input'] {background-color: #1F2833 !important; color: white !important;} .chat-bubble-user {background-color: #1F2833; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #45A29E;} .chat-bubble-bot {background-color: #121824; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #66FCF1;}</style>", unsafe_value_html=True)
 
 # =====================================================================
-# 2. X-AI (GROK) API INTEGRATION WITH YOUR KEY
+# 2. X-AI (GROK) API INTEGRATION
 # =====================================================================
 GROK_API_KEY = "AQ.Ab8RN6JTWQrtbdXgr-zD5mhScp2Xorp_TtyOO9ZaiK_lLKSbVA"
 
@@ -34,7 +33,7 @@ def call_grok(prompt_text):
     data = {
         "model": "grok-beta",
         "messages": [
-            {"role": "system", "content": "You are an elite AI system. Perform real-time web research if required to give accurate and high quality answers."},
+            {"role": "system", "content": "You are an elite AI system. Perform real-time web research if required."},
             {"role": "user", "content": prompt_text}
         ],
         "stream": False
@@ -49,7 +48,7 @@ def call_grok(prompt_text):
         return f"Connection Error: {str(e)}"
 
 # =====================================================================
-# 3. EXACT PROMPT DATA (NO CHANGES)
+# 3. FIXED AUTOMATION PROMPTS
 # =====================================================================
 PROMPT_1_CATEGORY = """Role & Context:
 You are an elite AI Content Strategist specializing in the "Dark Psychology, Hidden Matrix Codes, & Behavioral Domination" niche. Your job is to help users discover the most viral, high-retention topic for their short-form video.
@@ -124,9 +123,9 @@ Final but most necessary instructions that should be followed even if opposite i
 There should be no illogical, glitchy, uncomfortable,non-realistic ,tobotic motion and animation, no text at all (in girl section the nipples or shape of boob nipples should not be visible"""
 
 # =====================================================================
-# 4. WORKFLOW CONTROL LOGIC
+# 4. STREAMLIT APP ENGINE FLOW
 # =====================================================================
-st.title("🎴 Dark Matrix AI Core (Grok Engine)")
+st.title("🎴 Dark Matrix AI Core")
 st.caption("Automated Content Framework & Architecture")
 
 for chat in st.session_state.chat_history:
@@ -173,4 +172,13 @@ if user_input:
         st.session_state.chat_history.append({"role": "ai", "text": response_text})
         st.rerun()
 
-    elif st
+    elif st.session_state.step == "VISUAL_PHASE_2":
+        with st.spinner("Grok is bypassing restrictions & architecting visual prompts..."):
+            final_execution_prompt = f"{PROMPT_3_VISUAL}\n\n[PHASE 2 ACTIVE] Here is the target script to process now:\n{st.session_state.final_script}"
+            response_text = call_grok(final_execution_prompt)
+            st.session_state.step = "START"
+            st.session_state.chat_history.append({"role": "ai", "text": response_text})
+            st.rerun()
+            
+    else:
+        st.warning("⚠️ Sequence break. Type 'start' or follow the ongoing flow.")
